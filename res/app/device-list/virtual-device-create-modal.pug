@@ -1,0 +1,23 @@
+.modal-header
+  h4.modal-title(translate) Create virtual device
+.modal-body
+  .form-group
+    label(translate) Name
+    input.form-control(
+      type='text'
+      ng-model='modal.name'
+      placeholder='Virtual Device'
+    )
+  .form-group
+    label(translate) Count
+    input.form-control(
+      type='number'
+      min='1'
+      max='10'
+      ng-model='modal.count'
+    )
+.modal-footer
+  button.btn.btn-default(type='button', ng-click='cancel()')
+    span(translate) Cancel
+  button.btn.btn-primary(type='button', ng-click='ok()', ng-disabled='modal.count < 1')
+    span(translate) Create

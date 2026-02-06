@@ -2203,6 +2203,127 @@ paths:
             $ref: "#/definitions/UnexpectedErrorResponse"
       security:
         - accessTokenAuth: []
+  /virtual-devices:
+    x-swagger-router-controller: virtual-devices
+    get:
+      summary: Virtual device list
+      description: Returns list of all virtual devices
+      operationId: listVirtualDevices
+      tags:
+        - virtual-devices
+      responses:
+        "200":
+          description: Virtual device list
+          schema:
+            $ref: "#/definitions/VirtualDeviceListResponse"
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: "#/definitions/UnexpectedErrorResponse"
+      security:
+        - accessTokenAuth: []
+    post:
+      summary: Create virtual devices
+      description: Requests creation of one or more virtual devices
+      operationId: createVirtualDevices
+      tags:
+        - virtual-devices
+      parameters:
+        - name: body
+          in: body
+          required: false
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              count:
+                type: integer
+                minimum: 1
+                maximum: 10
+      responses:
+        "200":
+          description: Virtual devices created
+          schema:
+            $ref: "#/definitions/VirtualDeviceListResponse"
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: "#/definitions/UnexpectedErrorResponse"
+      security:
+        - accessTokenAuth: []
+  /virtual-devices/{id}:
+    x-swagger-router-controller: virtual-devices
+    delete:
+      summary: Delete virtual device
+      description: Requests deletion of a virtual device
+      operationId: deleteVirtualDevice
+      tags:
+        - virtual-devices
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Virtual device delete requested
+          schema:
+            $ref: "#/definitions/VirtualDeviceResponse"
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: "#/definitions/UnexpectedErrorResponse"
+      security:
+        - accessTokenAuth: []
+  /virtual-devices/{id}/start:
+    x-swagger-router-controller: virtual-devices
+    post:
+      summary: Start virtual device
+      description: Requests start of a virtual device
+      operationId: startVirtualDevice
+      tags:
+        - virtual-devices
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Virtual device start requested
+          schema:
+            $ref: "#/definitions/VirtualDeviceResponse"
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: "#/definitions/UnexpectedErrorResponse"
+      security:
+        - accessTokenAuth: []
+  /virtual-devices/{id}/stop:
+    x-swagger-router-controller: virtual-devices
+    post:
+      summary: Stop virtual device
+      description: Requests stop of a virtual device
+      operationId: stopVirtualDevice
+      tags:
+        - virtual-devices
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Virtual device stop requested
+          schema:
+            $ref: "#/definitions/VirtualDeviceResponse"
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: "#/definitions/UnexpectedErrorResponse"
+      security:
+        - accessTokenAuth: []
   /swagger.json:
     x-swagger-pipe: swagger_raw
 definitions:
@@ -2226,6 +2347,62 @@ definitions:
         default: true
       description:
         type: string
+  VirtualDevice:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      status:
+        type: string
+      avdName:
+        type: string
+      serial:
+        type: string
+      emulatorPort:
+        type: integer
+      createdBy:
+        type: object
+        properties:
+          email:
+            type: string
+          name:
+            type: string
+      createdAt:
+        type: string
+        format: date-time
+      updatedAt:
+        type: string
+        format: date-time
+      lastError:
+        type: string
+  VirtualDeviceResponse:
+    required:
+      - success
+      - description
+      - virtualDevice
+    properties:
+      success:
+        type: boolean
+      description:
+        type: string
+      virtualDevice:
+        $ref: "#/definitions/VirtualDevice"
+  VirtualDeviceListResponse:
+    required:
+      - success
+      - description
+      - virtualDevices
+    properties:
+      success:
+        type: boolean
+      description:
+        type: string
+      virtualDevices:
+        type: array
+        items:
+          $ref: "#/definitions/VirtualDevice"
   GroupResponse:
     required:
       - success

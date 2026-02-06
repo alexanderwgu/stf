@@ -87,3 +87,11 @@ img.device-icon-smallest {
 .stf-device-list .device-note:hover .device-note-edit {
   visibility: visible;
 }
+
+.stf-device-list .virtual-devices-panel {
+  margin: 10px 0 15px;
+}
+
+.stf-device-list .virtual-devices-panel .btn {
+  margin-right: 6px;
+}

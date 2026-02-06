@@ -11,6 +11,10 @@ module.exports = function DeviceListCtrl(
 , GroupService
 , ControlService
 , SettingsService
+, CommonService
+, VirtualDevicesService
+, $uibModal
+, $interval
 , $location
 ) {
   $scope.tracker = DeviceService.trackAll($scope)
@@ -237,4 +241,71 @@ module.exports = function DeviceListCtrl(
     $scope.sort = defaultSort
     $scope.columns = defaultColumns
   }
+
+  $scope.virtualDevices = []
+  $scope.virtualDevicesLoading = true
+
+  function refreshVirtualDevices() {
+    $scope.virtualDevicesLoading = true
+    return CommonService.errorWrapper(VirtualDevicesService.list, [])
+      .then(function(response) {
+        if (response && response.data && response.data.virtualDevices) {
+          $scope.virtualDevices = response.data.virtualDevices
+        }
+      })
+      .finally(function() {
+        $scope.virtualDevicesLoading = false
+      })
+  }
+
+  $scope.openVirtualDeviceModal = function() {
+    var modalInstance = $uibModal.open({
+      template: require('./virtual-device-create-modal.pug')
+    , controller: function($scope, $uibModalInstance) {
+        $scope.modal = {
+          name: ''
+        , count: 1
+        }
+
+        $scope.ok = function() {
+          $uibModalInstance.close($scope.modal)
+        }
+
+        $scope.cancel = function() {
+          $uibModalInstance.dismiss('cancel')
+        }
+      }
+    })
+
+    modalInstance.result.then(function(values) {
+      var count = Math.max(1, Number(values.count) || 1)
+      CommonService.errorWrapper(VirtualDevicesService.create, [
+        values.name
+      , count
+      ])
+      .then(refreshVirtualDevices)
+    })
+  }
+
+  $scope.startVirtualDevice = function(device) {
+    CommonService.errorWrapper(VirtualDevicesService.start, [device.id])
+      .then(refreshVirtualDevices)
+  }
+
+  $scope.stopVirtualDevice = function(device) {
+    CommonService.errorWrapper(VirtualDevicesService.stop, [device.id])
+      .then(refreshVirtualDevices)
+  }
+
+  $scope.deleteVirtualDevice = function(device) {
+    CommonService.errorWrapper(VirtualDevicesService.delete, [device.id])
+      .then(refreshVirtualDevices)
+  }
+
+  var virtualDevicesTimer = $interval(refreshVirtualDevices, 10000)
+  $scope.$on('$destroy', function() {
+    $interval.cancel(virtualDevicesTimer)
+  })
+
+  refreshVirtualDevices()
 }

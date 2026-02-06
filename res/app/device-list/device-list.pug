@@ -37,6 +37,49 @@
                     button(ng-click='reset()').btn.btn-xs.btn-danger-outline
                       i.fa.fa-trash-o
                       span(ng-bind='"Reset"|translate')
+            span.pull-right
+              button.btn.btn-sm.btn-success-outline(type='button', ng-click='openVirtualDeviceModal()')
+                i.fa.fa-plus
+                span(translate) Virtual device
+
+          .virtual-devices-panel
+            h4(translate) Virtual devices
+            p.text-muted(ng-if='virtualDevicesLoading', translate) Loading virtual devices...
+            p.text-muted(ng-if='!virtualDevicesLoading && !virtualDevices.length', translate)
+              | No virtual devices
+            table.table.table-condensed.table-striped(ng-if='virtualDevices.length')
+              thead
+                tr
+                  th(translate) Name
+                  th(translate) Status
+                  th(translate) Serial
+                  th(translate) Actions
+              tbody
+                tr(ng-repeat='virtualDevice in virtualDevices')
+                  td {{virtualDevice.name}}
+                  td
+                    span.label.label-default {{virtualDevice.status}}
+                    span.text-danger(ng-if='virtualDevice.lastError') {{virtualDevice.lastError}}
+                  td {{virtualDevice.serial || "-"}}
+                  td
+                    button.btn.btn-xs.btn-primary(
+                      type='button'
+                      ng-click='startVirtualDevice(virtualDevice)'
+                      ng-disabled='virtualDevice.status === "running" || virtualDevice.status === "starting" || virtualDevice.status === "creating" || virtualDevice.status === "deleting"'
+                    )
+                      span(translate) Start
+                    button.btn.btn-xs.btn-warning(
+                      type='button'
+                      ng-click='stopVirtualDevice(virtualDevice)'
+                      ng-disabled='virtualDevice.status === "stopped" || virtualDevice.status === "stopping" || virtualDevice.status === "creating" || virtualDevice.status === "deleting"'
+                    )
+                      span(translate) Stop
+                    button.btn.btn-xs.btn-danger(
+                      type='button'
+                      ng-click='deleteVirtualDevice(virtualDevice)'
+                      ng-disabled='virtualDevice.status === "deleting"'
+                    )
+                      span(translate) Delete
 
           uib-tabset.overflow-auto.device-list-active-tabs(ng-if='activeTabs')
             uib-tab(active='activeTabs.icons', select='focusSearch()')
