@@ -1,0 +1,15 @@
+.modal-header
+  h4.modal-title(translate) Run AI task
+.modal-body
+  .form-group
+    label(translate) Prompt
+    textarea.form-control(
+      rows='4'
+      ng-model='modal.prompt'
+      placeholder='Open Chrome and search for coffee nearby'
+    )
+.modal-footer
+  button.btn.btn-default(type='button', ng-click='cancel()')
+    span(translate) Cancel
+  button.btn.btn-primary(type='button', ng-click='ok()', ng-disabled='!modal.prompt')
+    span(translate) Run

@@ -2324,6 +2324,105 @@ paths:
             $ref: "#/definitions/UnexpectedErrorResponse"
       security:
         - accessTokenAuth: []
+  /ai/tasks:
+    x-swagger-router-controller: ai-tasks
+    get:
+      summary: AI tasks list
+      description: Returns list of all AI tasks
+      operationId: listAiTasks
+      tags:
+        - ai-tasks
+      responses:
+        "200":
+          description: AI tasks list
+          schema:
+            $ref: "#/definitions/AiTaskListResponse"
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: "#/definitions/UnexpectedErrorResponse"
+      security:
+        - accessTokenAuth: []
+  /ai/devices/{serial}/tasks:
+    x-swagger-router-controller: ai-tasks
+    get:
+      summary: AI tasks list by device
+      description: Returns list of AI tasks for a device
+      operationId: listAiTasksByDevice
+      tags:
+        - ai-tasks
+      parameters:
+        - name: serial
+          in: path
+          required: true
+          type: string
+      responses:
+        "200":
+          description: AI tasks list
+          schema:
+            $ref: "#/definitions/AiTaskListResponse"
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: "#/definitions/UnexpectedErrorResponse"
+      security:
+        - accessTokenAuth: []
+    post:
+      summary: Create AI task
+      description: Creates an AI task for a device
+      operationId: createAiTask
+      tags:
+        - ai-tasks
+      parameters:
+        - name: serial
+          in: path
+          required: true
+          type: string
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            required:
+              - prompt
+            properties:
+              prompt:
+                type: string
+      responses:
+        "200":
+          description: AI task created
+          schema:
+            $ref: "#/definitions/AiTaskResponse"
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: "#/definitions/UnexpectedErrorResponse"
+      security:
+        - accessTokenAuth: []
+  /ai/tasks/{id}:
+    x-swagger-router-controller: ai-tasks
+    delete:
+      summary: Cancel AI task
+      description: Cancels a running AI task
+      operationId: cancelAiTask
+      tags:
+        - ai-tasks
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        "200":
+          description: AI task cancelled
+          schema:
+            $ref: "#/definitions/AiTaskResponse"
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: "#/definitions/UnexpectedErrorResponse"
+      security:
+        - accessTokenAuth: []
   /swagger.json:
     x-swagger-pipe: swagger_raw
 definitions:
@@ -2403,6 +2502,70 @@ definitions:
         type: array
         items:
           $ref: "#/definitions/VirtualDevice"
+  AiTask:
+    type: object
+    properties:
+      id:
+        type: string
+      serial:
+        type: string
+      prompt:
+        type: string
+      status:
+        type: string
+      pid:
+        type: integer
+      exitCode:
+        type: integer
+      startedAt:
+        type: string
+        format: date-time
+      finishedAt:
+        type: string
+        format: date-time
+      logTail:
+        type: string
+      lastError:
+        type: string
+      createdBy:
+        type: object
+        properties:
+          email:
+            type: string
+          name:
+            type: string
+      createdAt:
+        type: string
+        format: date-time
+      updatedAt:
+        type: string
+        format: date-time
+  AiTaskResponse:
+    required:
+      - success
+      - description
+      - aiTask
+    properties:
+      success:
+        type: boolean
+      description:
+        type: string
+      aiTask:
+        $ref: "#/definitions/AiTask"
+  AiTaskListResponse:
+    required:
+      - success
+      - description
+      - aiTasks
+    properties:
+      success:
+        type: boolean
+      description:
+        type: string
+      aiTasks:
+        type: array
+        items:
+          $ref: "#/definitions/AiTask"
   GroupResponse:
     required:
       - success

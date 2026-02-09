@@ -43,6 +43,32 @@ module.exports = function DeviceScreenDirective(
       , device.display.height
       )
 
+      function isVirtualDevice() {
+        return device && typeof device.serial === 'string' &&
+          device.serial.indexOf('emulator-') === 0
+      }
+
+      function maybeHandleNavBarTap(scaled) {
+        if (!isVirtualDevice()) {
+          return false
+        }
+
+        if (scaled.yP < 0.92) {
+          return false
+        }
+
+        if (scaled.xP < 0.33) {
+          control.back()
+          return true
+        }
+        if (scaled.xP < 0.66) {
+          control.home()
+          return true
+        }
+        control.appSwitch()
+        return true
+      }
+
       /**
        * SCREEN HANDLING
        *
@@ -602,6 +628,10 @@ module.exports = function DeviceScreenDirective(
               , screen.rotation
               )
 
+          if (maybeHandleNavBarTap(scaled)) {
+            return
+          }
+
           control.touchDown(nextSeq(), 0, scaled.xP, scaled.yP, pressure)
 
           if (fakePinch) {
@@ -840,6 +870,10 @@ module.exports = function DeviceScreenDirective(
                 , y
                 , screen.rotation
                 )
+
+            if (maybeHandleNavBarTap(scaled)) {
+              return
+            }
 
             slotted[touch.identifier] = slot
             control.touchDown(nextSeq(), slot, scaled.xP, scaled.yP, pressure)

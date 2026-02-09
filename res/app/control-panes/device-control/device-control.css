@@ -200,6 +200,43 @@ device-screen input {
   display: inline-block;
 }
 
+.stf-device-control .stf-ai-task-status {
+  margin-left: 10px;
+  margin-top: 6px;
+  color: #333;
+}
+
+.stf-device-control .stf-ai-task-status .label {
+  margin-right: 6px;
+}
+
+.stf-device-control .stf-ai-task-log {
+  margin: 8px 10px 0 10px;
+  max-width: none;
+  width: calc(100% - 20px);
+  display: block;
+}
+
+.stf-device-control .stf-ai-task-log pre {
+  max-height: 240px;
+  overflow: auto;
+  padding: 8px;
+  background: #f7f7f7;
+  border: 1px solid #e0e0e0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  max-width: 100%;
+  box-sizing: border-box;
+  user-select: text;
+  pointer-events: auto;
+}
+
+.stf-device-control .stf-ai-task-log {
+  user-select: text;
+  pointer-events: auto;
+}
+
 /* VNC buttons */
 .stf-vnc-bottom .btn-primary:hover {
   background: rgba(255, 255, 255, 1.0);
