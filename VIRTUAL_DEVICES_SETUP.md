@@ -78,13 +78,29 @@ stf local \
   --virtual-avdmanager-path "$HOME/Library/Android/sdk/cmdline-tools/latest/bin/avdmanager" \
   --virtual-emulator-path "$HOME/Library/Android/sdk/emulator/emulator" \
   --virtual-adb-path "$HOME/Library/Android/sdk/platform-tools/adb" \
-  --virtual-template-system-image "system-images;android-33;google_apis;arm64-v8a"
+  --virtual-template-system-image "system-images;android-33;google_apis;arm64-v8a" \
+  --virtual-adb-keyboard-apk-path "/tmp/ADBKeyboard.apk"
 ```
 
 Replace the system image if you are on Intel:
 
 ```bash
 --virtual-template-system-image "system-images;android-33;google_apis;x86_64"
+```
+
+## Auto-install ADB Keyboard on every emulator
+
+Download the APK once:
+
+```bash
+curl -L -o /tmp/ADBKeyboard.apk \
+  https://github.com/senzhk/ADBKeyBoard/raw/master/ADBKeyboard.apk
+```
+
+Then add:
+
+```bash
+--virtual-adb-keyboard-apk-path "/tmp/ADBKeyboard.apk"
 ```
 
 Open the app at `http://localhost:7100` and click **Virtual device +** on the
