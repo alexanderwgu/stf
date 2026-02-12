@@ -15,3 +15,5 @@
 /tmp/
 package-lock.json
 yarn.lock
+
+/agent_logs/
