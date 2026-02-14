@@ -17,8 +17,6 @@
             button(type='button', ng-model='showScreen', uib-btn-checkbox).btn.btn-xs.btn-info
               i(ng-show='showScreen', uib-tooltip='{{"Hide Screen"|translate}}', tooltip-placement='bottom').fa.fa-eye
               i(ng-show='!showScreen', uib-tooltip='{{"Show Screen"|translate}}', tooltip-placement='bottom').fa.fa-eye-slash
-            button(type='button', ng-click='openAiTaskModal()', uib-tooltip='{{"Run AI task"|translate}}', tooltip-placement='bottom').btn.btn-sm.btn-success-outline
-              i.fa.fa-magic
             button(type='button', ng-click='kickDevice(device); $event.stopPropagation()', uib-tooltip='{{"Stop Using"|translate}}', tooltip-placement='bottom').btn.btn-sm.btn-danger-outline
               i.fa.fa-times
 
@@ -41,35 +39,6 @@
                   .pull-right(ng-click='kickDevice(groupDevice); $event.stopPropagation()').kick-device
                     i.fa.fa-times
                   .clearfix
-          .stf-ai-task-status.pull-left(ng-if='latestAiTask()')
-            span.label.label-info AI
-            span(ng-if='aiTaskLoading') {{ "Loading" | translate }}...
-            span(ng-if='!aiTaskLoading')
-              | {{ latestAiTask().status }}
-            button.btn.btn-xs.btn-warning(
-              type='button'
-              ng-if='latestAiTask().status === "running" || latestAiTask().status === "queued"'
-              ng-click='cancelAiTask(latestAiTask())'
-            )
-              span(translate) Stop
-            button.btn.btn-xs.btn-default(
-              type='button'
-              ng-if='latestAiTask().logTail || latestAiTask().lastError'
-              ng-click='toggleAiLog()'
-            )
-              span(translate) Logs
-            button.btn.btn-xs.btn-default(
-              type='button'
-              ng-if='latestAiTask().logTail || latestAiTask().lastError'
-              ng-click='copyAiLog()'
-              uib-tooltip='{{"Copy logs"|translate}}'
-              tooltip-placement='bottom'
-            )
-              i.fa.fa-copy
-      .stf-ai-task-log-row.as-row(ng-if='showAiLog && (latestAiTask().logTail || latestAiTask().lastError)')
-        .stf-ai-task-log.as-cell
-          pre {{ (latestAiTask().lastError || "") + "\n" + (latestAiTask().logTail || "") }}
-
       .as-row.fill-height
         div(ng-controller='DeviceScreenCtrl', ng-if='device').as-cell.fill-height
           div(ng-file-drop='installFile($files)', ng-file-drag-over-class='dragover').fill-height

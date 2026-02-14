@@ -4,6 +4,7 @@ module.exports = angular.module('control-panes', [
   require('stf/control').name,
   require('stf/scoped-hotkeys').name,
   require('./device-control').name,
+  require('./ai').name,
   require('./advanced').name,
   require('./automation').name,
   require('./performance').name,

@@ -1,0 +1,55 @@
+.widget-container.fluid-height.stf-ai-pane(ng-controller='AiPaneCtrl')
+  .heading
+    button.btn.btn-sm.btn-success-outline(
+      type='button'
+      ng-click='openAiTaskModal()'
+    )
+      i.fa.fa-magic
+      span(translate) Run AI task
+    .button-spacer
+    button.btn.btn-sm.btn-primary-outline(
+      type='button'
+      ng-click='refreshAiTasks()'
+    )
+      i.fa.fa-refresh
+      span(translate) Refresh
+  .widget-content.padded
+    div(ng-if='aiTaskLoading')
+      span(translate) Loading...
+    div(ng-if='!aiTaskLoading && !aiTasks.length')
+      nothing-to-show(message='{{"No AI tasks yet"|translate}}', icon='fa-magic')
+    div(ng-if='!aiTaskLoading && aiTasks.length')
+      .stf-ai-pane-status
+        span.label.label-info AI
+        span.status-text {{ latestAiTask().status }}
+        button.btn.btn-xs.btn-warning(
+          type='button'
+          ng-if='latestAiTask().status === "running" || latestAiTask().status === "queued"'
+          ng-click='cancelAiTask(latestAiTask())'
+        )
+          span(translate) Stop
+        button.btn.btn-xs.btn-default(
+          type='button'
+          ng-if='latestAiTask().logTail || latestAiTask().lastError'
+          ng-click='toggleAiLog()'
+        )
+          span(translate) Logs
+        button.btn.btn-xs.btn-default(
+          type='button'
+          ng-if='latestAiTask().logTail || latestAiTask().lastError'
+          ng-click='copyAiLog()'
+        )
+          i.fa.fa-copy
+      .stf-ai-pane-log(ng-if='showAiLog && (latestAiTask().logTail || latestAiTask().lastError)')
+        pre {{ (latestAiTask().lastError || "") + "\n" + (latestAiTask().logTail || "") }}
+      table.table.table-condensed
+        thead
+          tr
+            th(translate) Status
+            th(translate) Prompt
+            th(translate) Created
+        tbody
+          tr(ng-repeat='task in aiTasks | orderBy:"-createdAt"')
+            td {{ task.status }}
+            td {{ task.prompt }}
+            td {{ task.createdAt | date:'medium' }}

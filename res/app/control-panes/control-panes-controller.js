@@ -9,6 +9,12 @@ module.exports =
 
     var sharedTabs = [
       {
+        title: gettext('AI'),
+        icon: 'fa-magic color-green',
+        templateUrl: 'control-panes/ai/ai.pug',
+        filters: ['native', 'web']
+      },
+      {
         title: gettext('Screenshots'),
         icon: 'fa-camera color-skyblue',
         templateUrl: 'control-panes/screenshots/screenshots.pug',

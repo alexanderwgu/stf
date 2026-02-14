@@ -1,0 +1,19 @@
+.stf-ai-pane .stf-ai-pane-status {
+  margin-bottom: 10px;
+}
+
+.stf-ai-pane .stf-ai-pane-status .status-text {
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+.stf-ai-pane .stf-ai-pane-log {
+  margin-bottom: 12px;
+}
+
+.stf-ai-pane .stf-ai-pane-log pre {
+  max-height: 280px;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
